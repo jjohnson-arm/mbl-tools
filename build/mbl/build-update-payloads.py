@@ -65,7 +65,7 @@ def main():
     bitbake = Bitbake(
         builddir=args.builddir, machine=args.machine, distro=args.distro
     )
-    bitbake.setup_environment()
+    bitbake.setup_environment(verbose=True)
 
     # Build the packages
     packages = "virtual/atf optee-os virtual/bootloader virtual/kernel"
@@ -73,7 +73,7 @@ def main():
         "bitbake -c cleansstate {}".format(packages),
         "bitbake {}".format(args.image),
     ]
-    bitbake.run_commands(bitbake_build_commands)
+    bitbake.run_commands(bitbake_build_commands, verbose=True)
 
     # Create the payloads
     create_update_payload_commands = [
@@ -90,7 +90,7 @@ def main():
             args.image, args.outputdir
         ),
     ]
-    bitbake.run_commands(create_update_payload_commands)
+    bitbake.run_commands(create_update_payload_commands, verbose=True)
 
 
 if __name__ == "__main__":

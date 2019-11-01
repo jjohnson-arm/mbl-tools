@@ -73,3 +73,6 @@ COPY poky-test/build-poky.py \
 # Scripts used to build BL2/BL3/fitImage components
 COPY common/bitbake_util.py \
      mbl/build-update-payloads.py ./
+
+# Scripts used to run commands in build environment
+COPY mbl/run-command.py ./

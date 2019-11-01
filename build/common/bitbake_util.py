@@ -80,9 +80,9 @@ class Bitbake(object):
         self._validate_parameters()
         self._check_environment()
 
-    def setup_environment(self):
+    def setup_environment(self, verbose=False):
         """Set up the Bitbake environment."""
-        self.run_command("cd {}".format(quote(str(self.builddir))))
+        self.run_command("cd {}".format(quote(str(self.builddir))), verbose=verbose)
         env_vars = self._build_env_variables_string()
         if env_vars:
             env_vars = quote(env_vars)
@@ -93,9 +93,9 @@ class Bitbake(object):
             quote(self.init_env_file),
             quote(self.distro),
         )
-        self.run_command(command)
+        self.run_command(command, stdout=verbose, verbose=verbose)
 
-    def run_command(self, command, timeout=None, stdout=True):
+    def run_command(self, command, timeout=None, stdout=True, verbose=False):
         """
         Run a command in the Bitbake environment.
 
@@ -111,16 +111,18 @@ class Bitbake(object):
         * output (str): output of the specified command
 
         """
-        print('Running "{}"...'.format(command))
+        if verbose:
+            print('Running "{}"...'.format(command))
         output = self._shell.run_command(
             command, timeout=timeout, async_=False
         )
         if stdout:
             print(output)
-        print("Done!")
+        if verbose:
+            print("Done!")
         return output
 
-    def run_commands(self, commands, timeout=None, stdout=True):
+    def run_commands(self, commands, timeout=None, stdout=True, verbose=False):
         """
         Run a list of commands in the Bitbake environment.
 
@@ -137,7 +139,7 @@ class Bitbake(object):
 
         """
         for command in commands:
-            self.run_command(command, timeout=timeout, stdout=stdout)
+            self.run_command(command, timeout=timeout, stdout=stdout, verbose=verbose)
 
     def _build_env_variables_string(self):
         env_string = ""
