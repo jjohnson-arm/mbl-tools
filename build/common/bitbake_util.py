@@ -82,7 +82,9 @@ class Bitbake(object):
 
     def setup_environment(self, verbose=False):
         """Set up the Bitbake environment."""
-        self.run_command("cd {}".format(quote(str(self.builddir))), verbose=verbose)
+        self.run_command(
+            "cd {}".format(quote(str(self.builddir))), verbose=verbose
+        )
         env_vars = self._build_env_variables_string()
         if env_vars:
             env_vars = quote(env_vars)
@@ -139,7 +141,9 @@ class Bitbake(object):
 
         """
         for command in commands:
-            self.run_command(command, timeout=timeout, stdout=stdout, verbose=verbose)
+            self.run_command(
+                command, timeout=timeout, stdout=stdout, verbose=verbose
+            )
 
     def _build_env_variables_string(self):
         env_string = ""

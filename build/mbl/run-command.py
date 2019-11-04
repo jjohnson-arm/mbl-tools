@@ -7,10 +7,10 @@
 """Script to run a Bash command inside the MBL build environment"""
 
 import argparse
-import sys
+import os
 
 import file_util
-from bitbake_util import Bitbake
+
 
 def _parse_args():
     parser = argparse.ArgumentParser()
@@ -32,11 +32,6 @@ def _parse_args():
         required=False,
     )
     parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable verbose output",
-    )
-    parser.add_argument(
         "--command",
         metavar="STRING",
         help="Bash command to run in build environment.",
@@ -47,22 +42,21 @@ def _parse_args():
     file_util.ensure_is_directory(args.builddir)
     return args
 
+
 def main():
     """Script entry point."""
     args = _parse_args()
 
-    # Set up the BitBake environemnt
-    bitbake = Bitbake(
-        builddir=args.builddir, machine=args.machine, distro=args.distro
+    os.chdir(str(args.builddir))
+    os.environ["MACHINE"] = args.machine
+    os.environ["DISTRO"] = args.distro
+    os.execlp(
+        "bash",
+        "bash",
+        "-c",
+        "source setup-environment; {}".format(args.command),
     )
-    bitbake.setup_environment(verbose=args.verbose)
-    bitbake.run_command(args.command, verbose=args.verbose)
-    status = bitbake.run_command("echo $?", stdout=args.verbose, verbose=args.verbose).strip()
-    if not status.isdigit():
-        print("Failed to determine exit status of command", file=sys.stderr)
-        return 1
-    return int(status)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
