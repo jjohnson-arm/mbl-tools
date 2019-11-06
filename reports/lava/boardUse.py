@@ -52,10 +52,10 @@ def main():
         "<tr> \
         <th>Device Type</th> \
         <th>Total</th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/activejobs\" target=\"_blank\">Busy</a></th> \
+        <th>Busy</th> \
         <th>Idle</th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/labhealth\" target=\"_blank\">Offline</a></th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/queue\" target=\"_blank\">Queue</a></th> \
+        <th>Offline</th> \
+        <th>Queue</th> \
         </tr>\n"
     )
 
@@ -82,9 +82,7 @@ def main():
         if numBusy == 0:
             numBusy = ""
 
-        name = '<a href="https://lava.mbedcloudtesting.com/scheduler/device_type/{}" target="_blank">{}</a><br>'.format(
-            device["name"], device["name"]
-        )
+        name = '{}<br>'.format(device["name"])
 
         print(
             "<tr><td>{:>23}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><tr>".format(
@@ -96,17 +94,13 @@ def main():
         "<tr> \
         <th></th> \
         <th></th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/activejobs\" target=\"_blank\">Busy</a></th> \
+        <th>Busy</th> \
         <th></th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/labhealth\" target=\"_blank\">Offline</a></th> \
-        <th><a href=\"https://lava.mbedcloudtesting.com/scheduler/queue\" target=\"_blank\">Queue</a></th> \
+        <th>Offline</th> \
+        <th>Queue</th> \
         </tr>\n"
     )
     print("</table>")
-
-    print(
-        '<a href="https://lava.mbedcloudtesting.com/scheduler" target="_blank">Same info in LAVA WebUI</a><br>'
-    )
 
     print("</body>")
 
