@@ -11,6 +11,43 @@ from os import environ
 import sys
 import xmlrpc.client
 
+HTML_HEADER = """
+<head>
+<style>
+body { background-color: black; }
+table, th, td {
+    border:1px solid #669999;
+    border-collapse: collapse;
+    font-size: 1.4vw; /* Default size (jobs/tests) */
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding:5px;
+    border-bottom:3px solid #669999;
+    background-color:#f2f2f2;
+}
+table { min-width: 100%; }
+th { color:#353531; }
+.backamber  { background-color:#cc7a00; }
+.backred    { background-color:#8b0000; }
+.backgreen  { background-color:#006400; }
+.backgrey   { background-color:#808080; }
+.textbuild  { font-size: 2vw; } /* Build job header size */
+.textboard  { font-size: 1vw; } /* Board results size */
+.texttime   { float: right; font-size: 0.8vw; color:#fff }
+.textred    { color: #e60000; text-align: right; }
+.textamber  { color: #e68a00; text-align: right; }
+.textgreen  { color: #009900; text-align: right; }
+.textblack  { color: #353531; text-align: right; }
+.row { display: flex; }
+.column { flex: 50%; }
+a:link { text-decoration: none; color:#fff; }
+a:visited { text-decoration: none; color:#fff; }
+a:hover { text-decoration: underline; }
+a:active { text-decoration: underline; }
+</style>
+</head>
+<body>
+"""
 
 def main():
     """Perform the main execution."""
@@ -32,15 +69,8 @@ def main():
     except xmlrpc.client.ProtocolError as e:
         current_queues = None
 
-    print("<head>")
-    print("<style>")
-    print("table, th, td {")
-    print("border: 1px solid black;")
-    print("border-collapse: collapse;")
-    print("}")
-    print("</style>")
-    print("</head>")
-    print("<body>")
+    print(HTML_HEADER)
+
     print("<table>")
     print('<col width="250">')
     print('<col width="40">')
