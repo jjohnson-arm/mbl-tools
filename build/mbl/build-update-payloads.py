@@ -61,11 +61,10 @@ def main():
     """Script entry point."""
     args = _parse_args()
 
-    # Set tup the Bitbake environemnt
+    # Set up the Bitbake environemnt
     bitbake = Bitbake(
         builddir=args.builddir, machine=args.machine, distro=args.distro
     )
-    bitbake.setup_environment(verbose=True)
 
     # Build the packages
     packages = "virtual/atf optee-os virtual/bootloader virtual/kernel"
@@ -73,7 +72,8 @@ def main():
         "bitbake -c cleansstate {}".format(packages),
         "bitbake {}".format(args.image),
     ]
-    bitbake.run_commands(bitbake_build_commands, verbose=True)
+    for command in bitbake_build_commands:
+        bitbake.run_command(command, verbose=True, check=True)
 
     # Create the payloads
     create_update_payload_commands = [
@@ -90,8 +90,8 @@ def main():
             args.image, args.outputdir
         ),
     ]
-    bitbake.run_commands(create_update_payload_commands, verbose=True)
-
+    for command in create_update_payload_commands:
+        bitbake.run_command(command, verbose=True, check=True)
 
 if __name__ == "__main__":
     sys.exit(main())

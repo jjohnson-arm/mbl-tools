@@ -8,7 +8,9 @@
 
 import argparse
 import os
+import sys
 
+from bitbake_util import Bitbake
 import file_util
 
 
@@ -47,16 +49,11 @@ def main():
     """Script entry point."""
     args = _parse_args()
 
-    os.chdir(str(args.builddir))
-    os.environ["MACHINE"] = args.machine
-    os.environ["DISTRO"] = args.distro
-    os.execlp(
-        "bash",
-        "bash",
-        "-c",
-        "source setup-environment; {}".format(args.command),
+    bitbake = Bitbake(
+        builddir=args.builddir, machine=args.machine, distro=args.distro
     )
+    return bitbake.run_command(args.command).returncode
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
