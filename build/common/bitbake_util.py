@@ -52,11 +52,7 @@ class Bitbake(object):
     """Class for creating the Bitbake environment."""
 
     def __init__(
-        self,
-        builddir,
-        machine,
-        distro,
-        init_env_file="setup-environment",
+        self, builddir, machine, distro, init_env_file="setup-environment"
     ):
         """
         Initialize an object of this class.
@@ -77,15 +73,12 @@ class Bitbake(object):
 
     def _generate_setup_env_command(self, verbose=False):
         """Generate a Bash command to set up the BitBake environment."""
-
         redirect_str = ""
         if not verbose:
             redirect_str = ">/dev/null"
 
         return ". {} build-{} {}".format(
-            quote(self.init_env_file),
-            quote(self.distro),
-            redirect_str
+            quote(self.init_env_file), quote(self.distro), redirect_str
         )
 
     def run_command(self, command, verbose=False, **kwargs):
@@ -126,9 +119,7 @@ class Bitbake(object):
             cd_command = "cd {} &&".format(quote(str(kwargs["cwd"])))
 
         full_command = "{} && {} {}".format(
-            self._generate_setup_env_command(verbose),
-            cd_command,
-            command
+            self._generate_setup_env_command(verbose), cd_command, command
         )
 
         if verbose:

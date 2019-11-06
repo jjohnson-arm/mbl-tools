@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Script to run a Bash command inside the MBL build environment"""
+"""Script to run a Bash command inside the MBL build environment."""
 
 import argparse
 import os

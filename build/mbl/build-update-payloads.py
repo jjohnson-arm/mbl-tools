@@ -98,5 +98,6 @@ def main():
     for command in create_update_payload_commands:
         bitbake.run_command(command, verbose=True, check=True)
 
+
 if __name__ == "__main__":
     sys.exit(main())

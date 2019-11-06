@@ -31,6 +31,11 @@ cleanup() {
 
 quiet_printf() {
     if [ "$quiet" -ne 1 ]; then
+        # Shellcheck warns about printf's format string being variable, but
+        # quiet_printf is just forwarding args to printf, so it's
+        # quiet_printf's caller's responsibility to ensure that quiet_printf's
+        # format string isn't variable.
+        # shellcheck disable=SC2059
         printf "$@"
     fi
 }
@@ -183,6 +188,11 @@ config=()
 config_setup config "$@"
 
 # Set up args including values from config
+# Shell check wants us to quote the printf substitution to prevent word
+# splitting here, but we *want* word splitting of printf's output. The "%q" in
+# printf's format string means that the word splitting will happen in the right
+# places.
+# shellcheck disable=SC2046
 eval set -- $(printf '%q ' "${config[@]}")
 
 # Save the full command line for later - when we do a binary release we want a
