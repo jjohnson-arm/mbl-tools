@@ -115,7 +115,7 @@ class Bitbake(object):
         # runs. We can't do that with subprocess.run()'s "cwd" option so add a
         # "cd" command after sourcing setup-environment.
         cd_command = ""
-        if "cwd" in kwargs and kwargs["cwd"]:
+        if kwargs.get("cwd"):
             cd_command = "cd {} &&".format(quote(str(kwargs["cwd"])))
 
         full_command = "{} && {} {}".format(
