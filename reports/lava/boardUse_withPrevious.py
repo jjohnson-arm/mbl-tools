@@ -78,7 +78,7 @@ def main():
     parser.add_argument(
         "--pickle",
         type=str,
-        default="lava-farm-status.p",
+        default="lava-farm-status-pickle.html",
         nargs=None,
         help="Name of pickle file that contains previous/current status",
     )
