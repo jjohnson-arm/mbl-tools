@@ -18,7 +18,7 @@ body { background-color: black; }
 table, th, td {
     border:1px solid #669999;
     border-collapse: collapse;
-    font-size: 1.4vw; /* Default size (jobs/tests) */
+    font-size: 1.3vw; /* Default size (jobs/tests) */
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     padding:5px;
@@ -27,13 +27,14 @@ table, th, td {
 }
 table { min-width: 100%; }
 th { color:#353531; }
-.backamber  { background-color:#cc7a00; }
-.backred    { background-color:#8b0000; }
-.backgreen  { background-color:#006400; }
-.backgrey   { background-color:#808080; }
+.backamber  { background-color:#cc7a00; color:#fff; }
+.backred    { background-color:#8b0000; color:#fff; }
+.backgreen  { background-color:#006400; color:#fff; }
+.backgrey   { background-color:#808080; color:#fff; }
 .textbuild  { font-size: 2vw; } /* Build job header size */
-.textboard  { font-size: 1vw; } /* Board results size */
+.textboard  { font-size: 0.9vw; } /* Board results size */
 .texttime   { float: right; font-size: 0.8vw; color:#fff }
+.textkey    { background-color:#000; color:#fff; font-size: 0.9vw; }
 .textred    { color: #e60000; text-align: right; }
 .textamber  { color: #e68a00; text-align: right; }
 .textgreen  { color: #009900; text-align: right; }
@@ -49,9 +50,9 @@ a:active { text-decoration: underline; }
 <body>
 """
 
+
 def main():
     """Perform the main execution."""
-
     try:
         server = lRE.connect_to_server(
             environ["LAVA_SERVER"], environ["LAVA_USER"], environ["LAVA_TOKEN"]
@@ -112,7 +113,7 @@ def main():
         if numBusy == 0:
             numBusy = ""
 
-        name = '{}<br>'.format(device["name"])
+        name = "{}<br>".format(device["name"])
 
         print(
             "<tr><td>{:>23}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><tr>".format(
@@ -122,10 +123,10 @@ def main():
 
     print(
         "<tr> \
-        <th></th> \
-        <th></th> \
+        <th>Device Type</th> \
+        <th>Total</th> \
         <th>Busy</th> \
-        <th></th> \
+        <th>Idle</th> \
         <th>Offline</th> \
         <th>Queue</th> \
         </tr>\n"
