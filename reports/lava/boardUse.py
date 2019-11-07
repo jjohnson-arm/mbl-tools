@@ -121,16 +121,6 @@ def main():
             )
         )
 
-    print(
-        "<tr> \
-        <th>Device Type</th> \
-        <th>Total</th> \
-        <th>Busy</th> \
-        <th>Idle</th> \
-        <th>Offline</th> \
-        <th>Queue</th> \
-        </tr>\n"
-    )
     print("</table>")
 
     print("</body>")
