@@ -6,10 +6,11 @@
 
 """Parse LAVA results."""
 
+import argparse
 import lavaResultExtract as lRE
 from os import environ
+import pickle
 import sys
-import xmlrpc.client
 
 HTML_HEADER = """
 <head>
@@ -50,6 +51,16 @@ a:active { text-decoration: underline; }
 <body>
 """
 
+HTML_FOOTER = """
+</body>
+"""
+
+HELP_TEXT = """Lava farm status report generator.
+Requires the following environment variables to be set:
+  LAVA_SERVER - hostname of the server
+  LAVA_USER   - username of login to server
+  LAVA_TOKEN  - token used by username to login to server
+"""
 
 def main():
     """Perform the main execution."""
@@ -61,7 +72,17 @@ def main():
         print("ERROR: unset environment variable - {}".format(key))
         exit(2)
 
-    # Find results from jobs submitted by mbl and containing the provided build tag
+    parser = argparse.ArgumentParser(
+        description=HELP_TEXT, formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        "--pickle",
+        type=str,
+        default="lava-farm-status.pkl",
+        nargs=None,
+        help="Name of pickle file that contains previous/current status",
+    )
+    args = parser.parse_args()
 
     allDevices = server.scheduler.all_device_types()
 
@@ -90,19 +111,29 @@ def main():
         </tr>\n"
     )
 
+    try:
+        lastStats = pickle.load(open(args.pickle,"rb"))
+    except FileNotFoundError:
+        lastStats = []
+
+    stats = []
+
     for device in allDevices:
         numIdle = device["idle"]
         numBusy = device["busy"]
         numOffline = device["offline"]
         total = numIdle + numBusy + numOffline
 
-        if numOffline == 0:
-            numOffline = ""
-
         if current_queues != None:
             numQueue = current_queues[device["name"]]
         else:
             numQueue = 0
+
+        stats.append([{"name" : device["name"]},{"total":total},{"busy":numBusy},{"idle":numIdle},{"offline":numOffline},{"queue":numQueue}])
+
+
+        if numOffline == 0:
+            numOffline = ""
 
         if numQueue == 0:
             numQueue = ""
@@ -123,7 +154,33 @@ def main():
 
     print("</table>")
 
-    print("</body>")
+    print(HTML_FOOTER)
+
+    print(lastStats)
+    print(stats)
+    pickle.dump(stats, open(args.pickle, "wb"))
+
+def compare_runs(runs, value, board=None):
+    """Compare a value between runs and return indication of better/worse.
+
+    :return: HTML symbol to indicate status.
+
+    """
+    if "Previous" in runs:
+        if board:
+            last = runs["Last"]["Boards"][board][value]
+            prev = runs["Previous"]["Boards"][board][value]
+        else:
+            last = runs["Last"]["Totals"][value]
+            prev = runs["Previous"]["Totals"][value]
+        if last > prev:
+            return "&uArr; "
+        elif last < prev:
+            return "&dArr; "
+        else:
+            return "&equals; "
+    else:
+        return ""
 
 
 if __name__ == "__main__":
