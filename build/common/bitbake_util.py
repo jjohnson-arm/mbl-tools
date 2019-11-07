@@ -125,6 +125,14 @@ class Bitbake(object):
         if verbose:
             print('Running "{}"...'.format(full_command))
 
+        # Flush stdout and stderr before calling the subprocess so that the
+        # subprocess's output can't appear before prints we've already done.
+        # This is more noticable when stdout and/or stderr are redirected to
+        # files - they are block-buffered rather than line-buffered in that
+        # case (yes, even stderr on at least some versions of Python!).
+        sys.stdout.flush()
+        sys.stderr.flush()
+
         # Don't modify the caller's dict
         kwargs = kwargs.copy()
 
